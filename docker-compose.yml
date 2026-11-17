@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  core-db:
+    image: postgres:15-alpine
+    container_name: core-db
+    restart: always
+    environment:
+      POSTGRES_DB: banking_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - banking-network
+
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://core-db:5432/banking_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+    networks:
+      - banking-network
+    depends_on:
+      - core-db
+
+  transaction-service:
+    build:
+      context: ./transaction-service
+      dockerfile: Dockerfile
+    container_name: transaction-service
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://core-db:5432/banking_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      ACCOUNT_SERVICE_URL: http://account-service:8080
+    networks:
+      - banking-network
+    depends_on:
+      - core-db
+      - account-service
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "80:8080"
+    networks:
+      - banking-network
+    depends_on:
+      - account-service
+      - transaction-service
+
+networks:
+  banking-network:
+    driver: bridge
+
+volumes:
+  pg-data:

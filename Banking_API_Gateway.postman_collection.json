@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "Banking API Gateway Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create Account via Gateway",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"accountNumber\":\"ACC10001\",\"ownerName\":\"Nguyen Van A\",\"balance\":5000000}"
+        },
+        "url": {
+          "raw": "http://localhost/api/v1/accounts",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "accounts"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Get Account by ID via Gateway",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost/api/v1/accounts/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "accounts",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Transfer Money via Gateway",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fromAccount\":\"ACC10001\",\"toAccount\":\"ACC10002\",\"amount\":1500000}"
+        },
+        "url": {
+          "raw": "http://localhost/api/v1/transactions/transfer",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "transactions",
+            "transfer"
+          ]
+        }
+      }
+    }
+  ]
+}
